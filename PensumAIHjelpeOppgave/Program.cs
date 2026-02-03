@@ -17,7 +17,7 @@ using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<Database>();
     db.EnsureCreated();
-    db.SeedIfEmpty(targetCount: 10);
+    db.SeedIfEmpty(targetCount: 9);
 }
 
 app.MapControllers();

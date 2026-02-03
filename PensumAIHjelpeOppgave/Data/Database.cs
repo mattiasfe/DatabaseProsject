@@ -69,8 +69,8 @@ CREATE INDEX IF NOT EXISTS IX_Users_Email ON Users(Email);";
 
             using var insertCmd = conn.CreateCommand();
             insertCmd.CommandText = @"
-INSERT INTO Users (Email, Name, CreatedAt)
-VALUES ($email, $name, $createdAt)";
+                INSERT INTO Users (Email, Name, CreatedAt)
+                VALUES ($email, $name, $createdAt)";
             var pEmail = insertCmd.CreateParameter();
             pEmail.ParameterName = "$email";
             insertCmd.Parameters.Add(pEmail);
