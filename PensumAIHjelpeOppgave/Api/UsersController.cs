@@ -1,6 +1,10 @@
 ﻿using Backend.Models;
-using Backend.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.Sqlite;
+using PensumAIHjelpeOppgave.Services;
+using PensumAIHjelpeOppgave.Models;
+
+
 
 namespace Backend.Api;
 

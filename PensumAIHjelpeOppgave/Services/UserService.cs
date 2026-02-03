@@ -1,10 +1,9 @@
-﻿using Backend.Data;
-using Backend.Models;
-using Microsoft.Data.Sqlite;
+﻿using Backend.Models;
 using PensumAIHjelpeOppgave.Data;
 using PensumAIHjelpeOppgave.Models;
+using Microsoft.Data.Sqlite;
 
-namespace Backend.Services;
+namespace PensumAIHjelpeOppgave.Services;
 
 public class UserService
 {
@@ -18,12 +17,12 @@ public class UserService
     public List<User> GetAll()
     {
         using var conn = _db.GetConnection();
+        conn.Open(); // VIKTIG: Forbindelsen må åpnes
+        
         using var cmd = conn.CreateCommand();
-
         cmd.CommandText = "SELECT Id, Email, Name, CreatedAt FROM Users";
 
         using var reader = cmd.ExecuteReader();
-
         var users = new List<User>();
 
         while (reader.Read())
@@ -42,16 +41,17 @@ public class UserService
     public void Create(CreateUserDto dto)
     {
         using var conn = _db.GetConnection();
+        conn.Open(); // VIKTIG: Forbindelsen må åpnes
+        
         using var cmd = conn.CreateCommand();
-
         cmd.CommandText = """
-                              INSERT INTO Users (Email, Name, CreatedAt)
-                              VALUES ($email, $name, $createdAt)
+                          INSERT INTO Users (Email, Name, CreatedAt)
+                          VALUES ($email, $name, $createdAt)
                           """;
 
         cmd.Parameters.AddWithValue("$email", dto.Email);
         cmd.Parameters.AddWithValue("$name", dto.Name);
-        cmd.Parameters.AddWithValue("$createdAt", DateTime.UtcNow);
+        cmd.Parameters.AddWithValue("$createdAt", DateTime.UtcNow.ToString("O")); // ISO 8601 format er tryggest for SQLite
 
         cmd.ExecuteNonQuery();
     }

@@ -1,18 +1,33 @@
-﻿namespace PensumAIHjelpeOppgave.Events;
+﻿using System;
+using System.Text.Json;
 
-public void Log(string type, object payload)
+namespace PensumAIHjelpeOppgave.Events
 {
-    using var conn = _db.GetConnection();
-    using var cmd = conn.CreateCommand();
+    public sealed class EventLogger
+    {
+        private readonly PensumAIHjelpeOppgave.Data.Database _db;
 
-    cmd.CommandText = """
-        INSERT INTO Events (Type, Payload, CreatedAt)
-        VALUES ($type, $payload, $time)
-    """;
+        public EventLogger(PensumAIHjelpeOppgave.Data.Database db)
+        {
+            _db = db;
+        }
 
-    cmd.Parameters.AddWithValue("$type", type);
-    cmd.Parameters.AddWithValue("$payload", JsonSerializer.Serialize(payload));
-    cmd.Parameters.AddWithValue("$time", DateTime.UtcNow);
+        public void Log(string type, object payload)
+        {
+            using var conn = _db.GetConnection();
+            using var cmd = conn.CreateCommand();
 
-    cmd.ExecuteNonQuery();
+            cmd.CommandText = """
+                INSERT INTO Events (Type, Payload, CreatedAt)
+                VALUES ($type, $payload, $time)
+            """;
+
+            cmd.Parameters.AddWithValue("$type", type);
+            cmd.Parameters.AddWithValue("$payload", JsonSerializer.Serialize(payload));
+            // Lagre tidspunkt som ISO 8601-streng for SQLite-kompatibilitet
+            cmd.Parameters.AddWithValue("$time", DateTime.UtcNow.ToString("O"));
+
+            cmd.ExecuteNonQuery();
+        }
+    }
 }
