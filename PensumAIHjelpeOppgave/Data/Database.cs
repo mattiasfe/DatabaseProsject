@@ -35,14 +35,14 @@ public sealed class Database
         using var conn = GetConnection();
         using var cmd = conn.CreateCommand();
         cmd.CommandText = @"
-CREATE TABLE IF NOT EXISTS Users (
-    Id INTEGER PRIMARY KEY AUTOINCREMENT,
-    Email TEXT NOT NULL UNIQUE,
-    Name TEXT NOT NULL,
-    CreatedAt TEXT NOT NULL
+        CREATE TABLE IF NOT EXISTS Users (
+            Id INTEGER PRIMARY KEY AUTOINCREMENT,
+            Email TEXT NOT NULL UNIQUE,
+            Name TEXT NOT NULL,
+            CreatedAt TEXT NOT NULL
 );
-CREATE INDEX IF NOT EXISTS IX_Users_Email ON Users(Email);";
-        cmd.ExecuteNonQuery();
+            CREATE INDEX IF NOT EXISTS IX_Users_Email ON Users(Email);";
+                    cmd.ExecuteNonQuery();
     }
 
     // Seede dummy data dersom det mangler brukere
@@ -71,6 +71,7 @@ CREATE INDEX IF NOT EXISTS IX_Users_Email ON Users(Email);";
             insertCmd.CommandText = @"
                 INSERT INTO Users (Email, Name, CreatedAt)
                 VALUES ($email, $name, $createdAt)";
+            
             var pEmail = insertCmd.CreateParameter();
             pEmail.ParameterName = "$email";
             insertCmd.Parameters.Add(pEmail);

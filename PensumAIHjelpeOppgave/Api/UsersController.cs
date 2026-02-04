@@ -1,12 +1,10 @@
 ﻿using Backend.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.Sqlite;
-using PensumAIHjelpeOppgave.Services;
 using PensumAIHjelpeOppgave.Models;
+using PensumAIHjelpeOppgave.Services;
 
-
-
-namespace Backend.Api;
+namespace PensumAIHjelpeOppgave.Api;
 
 [ApiController]
 [Route("users")]
